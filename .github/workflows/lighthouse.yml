@@ -138,7 +138,7 @@ jobs:
         # error-level assertion (accessibility/SEO) fails the lhci step —
         # that's exactly when the author needs the per-page table.
         if: always() && github.event_name == 'pull_request'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             async function run() {
