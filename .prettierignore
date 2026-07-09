@@ -29,3 +29,5 @@ playwright-report
 # Other
 .DS_Store
 *.pem
+# Static WordPress clone assets (not source)
+public/
