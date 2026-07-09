@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import CookieConsent from './../components/cookie-consent'
+import NavToggle from './../components/nav-toggle'
 import GoogleTagManager, { GoogleTagManagerNoScript } from './../components/google-tag-manager'
 import { siteConfig, siteUrl, twitterSite, cardDescription } from '@/lib/site.config'
 import { assetPath } from '@/lib/assetPath'
@@ -117,6 +118,7 @@ export default function RootLayout({
             here. FFC technical features — metadata, CSP, GTM, cookie consent,
             fonts, favicon — are retained via <head> + the wrappers below. */}
         <main id="main-content">{children}</main>
+        <NavToggle />
         <CookieConsent />
       </body>
     </html>

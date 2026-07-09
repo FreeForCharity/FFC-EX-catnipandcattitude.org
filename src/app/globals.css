@@ -220,3 +220,31 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Cloned-site navigation. The live GoDaddy builder runtime (removed along with
+   its trackers) normally flips the nav from visibility:hidden to visible and
+   toggles the mobile drawer. We reproduce that with static CSS scoped under
+   `.x` (the cloned body class) plus a tiny toggle (see NavToggle):
+     - reveal the horizontal desktop nav links; hide the JS-only "More" overflow
+     - keep the full-screen mobile drawer hidden until the hamburger sets
+       body[data-nav-open="true"]
+   -------------------------------------------------------------------------- */
+.x [data-ux='Nav'] [data-ux='NavLink'],
+.x [data-ux='Nav'] [data-ux='NavLinkActive'],
+.x [data-ux='Nav'] [data-ux='ListItemInline'] {
+  visibility: visible !important;
+}
+.x [data-ux='NavLinkDropdown'] {
+  display: none !important;
+}
+.x [data-ux='NavigationDrawer'] {
+  display: none !important;
+}
+body[data-nav-open='true'] .x [data-ux='NavigationDrawer'] {
+  display: flex !important;
+}
+body[data-nav-open='true'] .x [data-ux='NavigationDrawer'],
+body[data-nav-open='true'] .x [data-ux='NavigationDrawer'] * {
+  visibility: visible !important;
+}
