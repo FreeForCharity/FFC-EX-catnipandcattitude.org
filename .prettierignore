@@ -31,3 +31,7 @@ playwright-report
 *.pem
 # Static WordPress clone assets (not source)
 public/
+
+# Faithful clone page fragments (the live site's design + content, embedded as
+# routes via src/lib/clone-content.ts) — treated as assets, not formatted source.
+src/clone-content/

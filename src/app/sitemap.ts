@@ -25,13 +25,14 @@ type SitemapEntry = {
 // changeFrequency: 'monthly' for content pages, 'yearly' for policy pages.
 export const routes: readonly SitemapEntry[] = [
   { path: '/', changeFrequency: 'weekly', priority: 1.0 },
+  { path: '/who-we-are', changeFrequency: 'monthly', priority: 0.8 },
+  { path: '/adoptions', changeFrequency: 'weekly', priority: 0.8 },
+  { path: '/fosters', changeFrequency: 'monthly', priority: 0.8 },
+  { path: '/donate-and-wishlist', changeFrequency: 'monthly', priority: 0.8 },
+  { path: '/supporters', changeFrequency: 'monthly', priority: 0.5 },
+  { path: '/contact', changeFrequency: 'monthly', priority: 0.5 },
   { path: '/privacy-policy', changeFrequency: 'yearly', priority: 0.2 },
   { path: '/cookie-policy', changeFrequency: 'yearly', priority: 0.2 },
-  { path: '/terms-of-service', changeFrequency: 'yearly', priority: 0.2 },
-  { path: '/donation-policy', changeFrequency: 'yearly', priority: 0.2 },
-  { path: '/free-for-charity-donation-policy', changeFrequency: 'yearly', priority: 0.2 },
-  { path: '/vulnerability-disclosure-policy', changeFrequency: 'yearly', priority: 0.2 },
-  { path: '/security-acknowledgements', changeFrequency: 'monthly', priority: 0.2 },
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {
