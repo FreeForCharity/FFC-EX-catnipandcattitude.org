@@ -1,18 +1,17 @@
-import React from 'react'
-import HomePage from '@/app/home-page'
-import OrganizationSchema from '@/components/seo/OrganizationSchema'
-import FaqSchema from '@/components/seo/FaqSchema'
-import WebsiteSchema from '@/components/seo/WebsiteSchema'
+import type { Metadata } from 'next'
+import { loadCloneContent } from '@/lib/clone-content'
 
-const page = () => {
-  return (
-    <div>
-      <OrganizationSchema />
-      <WebsiteSchema />
-      <FaqSchema />
-      <HomePage />
-    </div>
-  )
+export const metadata: Metadata = {
+  description:
+    'Catnip and Cattitude — compassionate care for community cats in the Willows, CA area. Adoptions, fostering, and TNR for cats in need.',
+  alternates: { canonical: '/' },
 }
 
-export default page
+export default function Page() {
+  return (
+    <div
+      className="x x-fonts-sacramento x-fonts-raleway"
+      dangerouslySetInnerHTML={{ __html: loadCloneContent('index') }}
+    />
+  )
+}

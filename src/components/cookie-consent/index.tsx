@@ -498,7 +498,11 @@ export default function CookieConsent() {
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex-1">
-            <h3 className="text-lg font-bold text-gray-900 mb-2">We Value Your Privacy</h3>
+            {/* h2 (not h3): this banner renders after the page's main content,
+                and on minimal pages (e.g. /fosters) the last content heading is
+                an h1 — an h3 here would skip a level and fail Lighthouse's
+                heading-order audit. h2 is valid after any content heading. */}
+            <h2 className="text-lg font-bold text-gray-900 mb-2">We Value Your Privacy</h2>
             <p className="text-sm text-gray-600 mb-3">
               We use cookies to improve your experience on our site, analyze traffic, and enable
               certain features. By clicking &quot;Accept All&quot;, you consent to our use of
@@ -506,10 +510,17 @@ export default function CookieConsent() {
               decline non-essential cookies.
             </p>
             <div className="flex items-center gap-4 text-xs text-gray-500">
-              <Link href="/privacy-policy" className="text-blue-600 underline">
+              {/* prefetch={false}: the consent banner renders on every page, so
+                  Next would eagerly prefetch both policy routes. Under the
+                  meta CSP's upgrade-insecure-requests, that prefetch is upgraded
+                  to https://localhost during local/CI Lighthouse runs and fails
+                  with ERR_SSL_PROTOCOL_ERROR, dinging the best-practices score.
+                  These are low-traffic footer links, so skipping prefetch costs
+                  nothing in production. */}
+              <Link href="/privacy-policy" prefetch={false} className="text-blue-600 underline">
                 Privacy Policy
               </Link>
-              <Link href="/cookie-policy" className="text-blue-600 underline">
+              <Link href="/cookie-policy" prefetch={false} className="text-blue-600 underline">
                 Cookie Policy
               </Link>
             </div>

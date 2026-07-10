@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import Header from './../components/header'
-import Footer from './../components/footer'
 import CookieConsent from './../components/cookie-consent'
+import NavToggle from './../components/nav-toggle'
 import GoogleTagManager, { GoogleTagManagerNoScript } from './../components/google-tag-manager'
 import { siteConfig, siteUrl, twitterSite, cardDescription } from '@/lib/site.config'
 import { assetPath } from '@/lib/assetPath'
@@ -50,11 +49,8 @@ export const metadata: Metadata = {
     images: [OG_IMAGE.url],
   },
   icons: {
-    icon: [
-      { url: assetPath('/favicon.ico'), sizes: '32x32' },
-      { url: assetPath('/icon.png'), type: 'image/png', sizes: '32x32' },
-    ],
-    apple: [{ url: assetPath('/apple-icon.png'), sizes: '180x180', type: 'image/png' }],
+    icon: [{ url: assetPath('/icon.png'), type: 'image/png', sizes: '512x512' }],
+    apple: [{ url: assetPath('/apple-icon.png'), type: 'image/png', sizes: '180x180' }],
   },
   // Manifest is generated dynamically from siteConfig via src/app/manifest.ts;
   // Next.js auto-wires the <link rel="manifest"> tag, so we don't set it here.
@@ -103,14 +99,6 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.clarity.ms" />
         <link rel="dns-prefetch" href="https://connect.facebook.net" />
 
-        {/* Preload critical LCP image */}
-        <link
-          rel="preload"
-          as="image"
-          href={assetPath('/Images/figma-hero-img.webp')}
-          fetchPriority="high"
-        />
-
         <GoogleTagManager />
       </head>
       <body
@@ -125,9 +113,12 @@ export default function RootLayout({
         <a href="#main-content" className="skip-to-content">
           Skip to main content
         </a>
-        <Header />
+        {/* The cloned pages carry their own header + footer (faithful to the
+            live site design), so the FFC template Header/Footer are omitted
+            here. FFC technical features — metadata, CSP, GTM, cookie consent,
+            fonts, favicon — are retained via <head> + the wrappers below. */}
         <main id="main-content">{children}</main>
-        <Footer />
+        <NavToggle />
         <CookieConsent />
       </body>
     </html>

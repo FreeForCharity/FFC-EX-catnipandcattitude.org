@@ -196,6 +196,34 @@ body {
   text-decoration: underline;
 }
 
+/* WCAG 1.4.1 (Use of Color) — the reCAPTCHA disclaimer in the cloned contact
+   form links to Google's Privacy Policy and Terms inside a paragraph of text.
+   The cloned GoDaddy styling distinguishes them by color alone, which fails
+   Lighthouse's link-in-text-block audit. Underline them so the link is
+   perceivable without relying on color. Scoped by href so only these in-text
+   policy links are affected, not the design's nav/button links. */
+a[href^='https://policies.google.com'] {
+  text-decoration: underline !important;
+}
+
+/* WCAG 1.4.3 (Contrast) — the cloned "Reviews" section banner heading is
+   styled white, but the section it sits on lost its dark backing in the
+   static clone, so it renders white-on-#fafafa (1.04:1, effectively
+   invisible). Recolor it to the brand dark green so it is both legible and
+   on-brand. Scoped to the unique SectionBannerHeading element. */
+[data-ux='SectionBannerHeading'] {
+  color: #173f3a !important;
+}
+
+/* Lighthouse image-aspect-ratio + visual correctness: the cloned "about" and
+   hero-band images are dropped into fixed-height boxes without object-fit, so
+   the browser stretches them off their natural ratio. `cover` preserves each
+   image's aspect ratio (cropping to fill the box) instead of distorting it. */
+[data-aid^='ABOUT_IMAGE'],
+[data-aid='BACKGROUND_IMAGE_RENDERED'] {
+  object-fit: cover;
+}
+
 /* Hide scrollbar globally */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
@@ -219,4 +247,32 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* --------------------------------------------------------------------------
+   Cloned-site navigation. The live GoDaddy builder runtime (removed along with
+   its trackers) normally flips the nav from visibility:hidden to visible and
+   toggles the mobile drawer. We reproduce that with static CSS scoped under
+   `.x` (the cloned body class) plus a tiny toggle (see NavToggle):
+     - reveal the horizontal desktop nav links; hide the JS-only "More" overflow
+     - keep the full-screen mobile drawer hidden until the hamburger sets
+       body[data-nav-open="true"]
+   -------------------------------------------------------------------------- */
+.x [data-ux='Nav'] [data-ux='NavLink'],
+.x [data-ux='Nav'] [data-ux='NavLinkActive'],
+.x [data-ux='Nav'] [data-ux='ListItemInline'] {
+  visibility: visible !important;
+}
+.x [data-ux='NavLinkDropdown'] {
+  display: none !important;
+}
+.x [data-ux='NavigationDrawer'] {
+  display: none !important;
+}
+body[data-nav-open='true'] .x [data-ux='NavigationDrawer'] {
+  display: flex !important;
+}
+body[data-nav-open='true'] .x [data-ux='NavigationDrawer'],
+body[data-nav-open='true'] .x [data-ux='NavigationDrawer'] * {
+  visibility: visible !important;
 }
