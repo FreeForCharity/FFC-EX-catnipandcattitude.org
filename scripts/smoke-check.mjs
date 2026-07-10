@@ -38,8 +38,11 @@ const REQUEST_TIMEOUT_MS = 15 * 1000
 const RETRY_DELAY_MS = 5 * 1000
 const deadline = Date.now() + TOTAL_DEADLINE_MS
 
-async function fetchWithRetry(path) {
-  const url = `${BASE}${path}`
+async function fetchWithRetry(path, { retryOn404 = false } = {}) {
+  // `path` is normally a root-relative path appended to BASE, but callers may
+  // also pass a fully-qualified URL (e.g. a manifest icon already resolved
+  // against BASE) — use it as-is so we don't prepend BASE twice.
+  const url = /^https?:\/\//.test(path) ? path : `${BASE}${path}`
   let lastErr = null
   for (let attempt = 1; Date.now() < deadline; attempt++) {
     const controller = new AbortController()
@@ -51,8 +54,11 @@ async function fetchWithRetry(path) {
         headers: { 'User-Agent': 'ffc-smoke-check' },
       })
       clearTimeout(timer)
-      // Only retry on 5xx or transient. 4xx is a real failure.
-      if (res.status >= 500 || res.status === 429) {
+      // Retry on 5xx / 429. Also retry 404 for asset checks (retryOn404):
+      // right after a deploy the Pages CDN can serve a freshly added file as
+      // 404 for a few seconds before it propagates to the edge. The 404-page
+      // check deliberately leaves retryOn404 off so it still resolves fast.
+      if (res.status >= 500 || res.status === 429 || (retryOn404 && res.status === 404)) {
         lastErr = `HTTP ${res.status}`
         await sleep(RETRY_DELAY_MS)
         continue
@@ -81,7 +87,7 @@ function record(name, ok, detail = '') {
 
 async function expect200(path, name = path) {
   try {
-    const res = await fetchWithRetry(path)
+    const res = await fetchWithRetry(path, { retryOn404: true })
     record(name, res.status === 200, `HTTP ${res.status}`)
     return res
   } catch (err) {
@@ -196,13 +202,16 @@ async function smoke() {
       if (Array.isArray(manifest.icons)) {
         for (const icon of manifest.icons) {
           if (!icon?.src) continue
-          const iconUrl = icon.src.startsWith('http')
+          // Resolve the icon src against BASE. Manifest srcs are absolute
+          // root paths that already include the basePath (e.g.
+          // /<repo>/icon.png on a subpath deploy), so string-concatenating
+          // BASE + src would double the basePath and 404. URL resolution
+          // makes an absolute src replace BASE's path correctly, and still
+          // resolves a relative src under BASE.
+          const iconAbsUrl = /^https?:\/\//.test(icon.src)
             ? icon.src
-            : icon.src.startsWith('/')
-              ? icon.src
-              : `/${icon.src}`
-          const iconPath = iconUrl.startsWith('http') ? iconUrl.replace(BASE, '') : iconUrl
-          const r = await fetchWithRetry(iconPath).catch(() => null)
+            : new URL(icon.src, `${BASE}/`).href
+          const r = await fetchWithRetry(iconAbsUrl, { retryOn404: true }).catch(() => null)
           const ok = r && r.status === 200
           record(`manifest icon ${icon.src} resolves`, ok, r ? `HTTP ${r.status}` : 'fetch failed')
         }
