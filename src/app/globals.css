@@ -229,6 +229,71 @@ a[href^='https://policies.google.com'] {
    the static clone), so these replace them with static, accessible image
    galleries: a featured pair of currently-adoptable cats and a grid of the
    adoption "success stories". */
+/* Contact call-to-action — the cloned GoDaddy "Drop us a line!" form can't
+   submit on a static site, so it's replaced with real mailto:/tel: buttons. */
+.ffc-contact-actions {
+  text-align: center;
+  max-width: 620px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+}
+.ffc-contact-prompt {
+  margin: 0 0 1.25rem;
+  color: #333333;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+.ffc-contact-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+/* !important: the cloned GoDaddy stylesheet has higher-specificity `.x a`
+   rules that otherwise force these links to black text, which fails contrast
+   on the dark-green primary button. */
+.ffc-contact-btn {
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 2px solid #173f3a;
+  color: #173f3a !important;
+  background-color: #ffffff !important;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+.ffc-contact-btn--primary {
+  background-color: #173f3a !important;
+  color: #f4c95d !important;
+}
+/* Stack the buttons on narrow screens so the longer "Call" button never
+   overflows the viewport. */
+@media (max-width: 520px) {
+  .ffc-contact-btns {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.ffc-contact-btn:hover,
+.ffc-contact-btn:focus-visible {
+  background-color: #0f2d29 !important;
+  color: #f4c95d !important;
+  border-color: #0f2d29;
+}
+
+/* Hide the cloned GoDaddy contact-form machinery on /contact — the JS-gated
+   "Drop us a line!" reveal button and its hidden desktop/mobile form
+   containers no longer work statically; the mailto:/tel: buttons replace it. */
+[data-aid='CONTACT_FORM_REVEAL_BUTTON_REND'],
+[data-aid='CONTACT_FORM_CONTAINER_DESKTOP'],
+[data-aid='CONTACT_FORM_CONTAINER_MOBILE'] {
+  display: none !important;
+}
+
 /* The cloned carousel viewport hard-codes height:600px and clips overflow;
    free it wherever it now wraps a static adoption gallery. */
 .carousel-viewport:has(.ffc-adopt) {
