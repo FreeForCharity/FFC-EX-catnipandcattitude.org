@@ -85,18 +85,22 @@ async function doh(name, type) {
 }
 
 // Follow CNAME chains to the terminal A records, collecting the chain.
+// DoH JSON answers carry a numeric record `type`; a single response can mix
+// types (e.g. a CNAME followed by the A records it resolves to), so always
+// filter by type (CNAME = 5, A = 1) rather than trusting Answer[0] — otherwise
+// an IP could be mistaken for the next hostname.
 async function resolveHost(host) {
   const chain = []
   let current = host
   for (let hops = 0; hops < 6; hops++) {
-    const cnames = await doh(current, 'CNAME')
-    if (cnames.length) {
-      chain.push({ from: current, cname: cnames[0].data })
-      current = cnames[0].data
+    const cname = (await doh(current, 'CNAME')).find((r) => r.type === 5)
+    if (cname) {
+      chain.push({ from: current, cname: cname.data })
+      current = cname.data
       continue
     }
     const a = await doh(current, 'A')
-    return { chain, terminal: current, ips: a.map((r) => r.data) }
+    return { chain, terminal: current, ips: a.filter((r) => r.type === 1).map((r) => r.data) }
   }
   return { chain, terminal: current, ips: [] }
 }

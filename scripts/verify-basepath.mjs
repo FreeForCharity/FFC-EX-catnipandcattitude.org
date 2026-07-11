@@ -90,21 +90,26 @@ function collectFiles(dir) {
 
 // For one signal, find every occurrence in `text`, walk back to the start of
 // the surrounding URL token, and confirm the segment immediately before the
-// signal equals BASE. Returns an array of violation objects.
+// signal equals BASE. Returns an array of violation objects. Signals that ARE
+// seen with the correct BASE prefix (host-stripped) are recorded in
+// `correctlyPrefixed` so the sanity check below can't false-fail on a build
+// that emits same-origin absolute URLs.
 const TOKEN_BOUNDARY = new Set(['"', "'", '(', ' ', '\t', '\n', ',', '=', '`'])
+const correctlyPrefixed = new Set()
 function violationsFor(text, signal) {
   const violations = []
   let idx = text.indexOf(signal)
   while (idx !== -1) {
-    // Walk back to the token boundary to recover the full URL prefix.
+    // Walk back to the token boundary to recover the full URL prefix, then
+    // strip a same-origin absolute URL scheme+host if present, so
+    // "https://host/repo/_next" is compared as "/repo".
     let start = idx
     while (start > 0 && !TOKEN_BOUNDARY.has(text[start - 1])) start--
-    let prefix = text.slice(start, idx)
-    // Strip a same-origin absolute URL scheme+host if one is present, so
-    // "https://host/repo/_next" is compared as "/repo".
-    prefix = prefix.replace(/^https?:\/\/[^/]+/i, '')
+    const prefix = text.slice(start, idx).replace(/^https?:\/\/[^/]+/i, '')
     if (prefix !== BASE) {
       violations.push({ signal, found: `${prefix}${signal}`, expected: `${BASE}${signal}` })
+    } else {
+      correctlyPrefixed.add(signal)
     }
     idx = text.indexOf(signal, idx + signal.length)
   }
@@ -122,11 +127,11 @@ console.log(
 )
 
 const allViolations = []
-let sawNextStatic = false
 for (const file of files) {
   const text = readFileSync(file, 'utf8')
-  if (text.includes(`${BASE}/_next/static/`)) sawNextStatic = true
   for (const signal of SIGNALS) {
+    // violationsFor also populates `correctlyPrefixed` for signals seen with
+    // the intended BASE, using the same token-boundary + host-stripping logic.
     for (const v of violationsFor(text, signal)) {
       allViolations.push({ file, ...v })
     }
@@ -134,9 +139,9 @@ for (const file of files) {
 }
 
 // Sanity: a real Next.js export always references /_next/static/ from its HTML.
-// If nothing matched the expected prefix, the build shape is wrong (e.g. the
-// basePath env was set but the build didn't pick it up).
-if (!sawNextStatic) {
+// If we never saw one with the intended basePath, the build shape is wrong
+// (e.g. the basePath env was set but the build didn't pick it up).
+if (!correctlyPrefixed.has('/_next/static/')) {
   console.error(
     `✗ No "${BASE}/_next/static/" reference found in any page — the build's ` +
       `basePath does not match the intended "${BASE || '(root)'}".`
