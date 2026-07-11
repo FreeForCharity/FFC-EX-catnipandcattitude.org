@@ -88,6 +88,17 @@ jobs:
           # whether public/CNAME exists.
           NEXT_PUBLIC_BASE_PATH: ${{ steps.basepath.outputs.value }}
 
+      - name: Verify emitted asset paths match the intended basePath
+        # Build-integrity gate: fails the deploy BEFORE the broken artifact
+        # goes live if any /_next, /Images, /fonts, or icon reference carries
+        # the wrong basePath. This is the safety net for the custom-domain
+        # cutover — it catches the exact class of breakage (subpath prefix
+        # leaking onto a root-served custom domain, or vice-versa) that
+        # otherwise only surfaces as a naked, 404-everywhere production site.
+        run: npm run check:basepath
+        env:
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.basepath.outputs.value }}
+
       - name: Upload artifact for Pages
         uses: actions/upload-pages-artifact@v5
         with:

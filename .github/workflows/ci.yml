@@ -60,6 +60,13 @@ jobs:
         # Reuses the build above — fails if shipped JS exceeds the gzipped budget.
         run: npm run check:bundle
 
+      - name: Verify asset paths (root/custom-domain build)
+        # CI builds without a basePath — the same shape the custom-domain
+        # deploy produces. Assert no subpath prefix leaked into the emitted
+        # asset references, so the custom-domain build is proven clean on
+        # every PR (not first exercised during the DNS cutover).
+        run: npm run check:basepath
+
       - name: Run E2E tests
         run: npm run test:e2e
         env:

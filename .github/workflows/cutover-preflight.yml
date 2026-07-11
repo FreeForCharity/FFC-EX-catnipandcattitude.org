@@ -1,0 +1,40 @@
+name: Cutover preflight (DNS/HTTPS readiness)
+
+# On-demand readiness check for the custom-domain DNS cutover. Run it from the
+# Actions tab before flipping DNS (confirms the Pages origin is healthy and the
+# domain's CAA won't block HTTPS) and again after (confirms the custom domain
+# is live over HTTPS and serving the new site). It never changes anything — it
+# only reads live DNS over DoH and probes HTTPS, then prints a go/no-go verdict.
+on:
+  workflow_dispatch:
+    inputs:
+      domain:
+        description: 'Custom domain to check'
+        required: true
+        default: 'catnipandcattitude.org'
+      origin:
+        description: 'GitHub Pages origin being cut over to'
+        required: true
+        default: 'https://freeforcharity.github.io/FFC-EX-catnipandcattitude.org/'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    name: DNS/HTTPS preflight
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+
+      - name: Run cutover preflight
+        run: >
+          node scripts/preflight-cutover.mjs
+          --domain="${{ inputs.domain }}"
+          --origin="${{ inputs.origin }}"

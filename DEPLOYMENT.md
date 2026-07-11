@@ -200,34 +200,99 @@ The site will be built without a base path, making all assets available at the r
 3. **Branch**: Select `gh-pages` or the branch created by the workflow
 4. **Folder**: Select `/ (root)`
 
-### Custom Domain Setup
+### Custom Domain Cutover Runbook (`catnipandcattitude.org`)
 
-If using a custom domain:
+This is the checked, reversible procedure for moving the site from the
+github.io testing URL to the production custom domain. The domain currently
+resolves through **Cloudflare** (verify any time with
+`npm run preflight:cutover`), so the DNS edits below are made in the Cloudflare
+dashboard for the `catnipandcattitude.org` zone.
 
-1. **Add a CNAME file** to the `public` directory with your domain:
+**How the basePath switches automatically.** `deploy.yml` picks the basePath
+from whether `public/CNAME` exists: no CNAME → `/FFC-EX-catnipandcattitude.org`
+(github.io subpath); CNAME present → empty (custom-domain root). The
+`npm run check:basepath` gate runs in the deploy right after the build and
+**fails the deploy before anything goes live** if the emitted asset paths don't
+match the intended basePath — this is what prevents the "naked site, everything
+404s" failure that a subpath/root mismatch used to cause.
 
+#### 1. Preflight (before touching DNS)
+
+```bash
+npm run preflight:cutover
+```
+
+Confirms the github.io origin is healthy and serving the new site, reports where
+the domain resolves today, and checks that CAA records won't block Let's
+Encrypt (GitHub Pages' certificate authority). You can also run it on demand
+from **Actions → "Cutover preflight (DNS/HTTPS readiness)"**. Do not proceed
+unless the origin is healthy.
+
+#### 2. Add the CNAME file and let it deploy
+
+1. Create `public/CNAME` containing exactly:
    ```
-   ffcworkingsite1.org
+   catnipandcattitude.org
    ```
+2. Merge to `main`. CI runs, then `deploy.yml` rebuilds with an **empty**
+   basePath, the `check:basepath` gate verifies the root-served build, and it
+   deploys. (Nothing is live on the custom domain yet — DNS still points at
+   Cloudflare.)
 
-2. **Configure DNS records** at your domain provider:
-   - **Type**: CNAME
-   - **Name**: www (or @)
-   - **Value**: freeforcharity.github.io
+#### 3. Set the custom domain in GitHub Pages
 
-3. **Enable HTTPS** in GitHub Pages settings (automatic with custom domain)
+**Settings → Pages → Custom domain** → enter `catnipandcattitude.org` → Save.
+Leave **Enforce HTTPS** unchecked until the certificate is issued (next step).
 
-4. **Update environment variables** if needed:
-   - Remove or leave empty `NEXT_PUBLIC_BASE_PATH` for custom domains
-   - GitHub Actions should detect custom domain and adjust automatically
+#### 4. Point DNS at GitHub Pages (Cloudflare)
 
-### DNS Propagation
+In the Cloudflare `catnipandcattitude.org` zone:
 
-After configuring DNS:
+- **Apex `@`** — replace the existing records with the four GitHub Pages A
+  records (and set the proxy status to **DNS only / grey cloud** so GitHub can
+  issue the certificate):
+  ```
+  185.199.108.153
+  185.199.109.153
+  185.199.110.153
+  185.199.111.153
+  ```
+- **`www`** — `CNAME` → `freeforcharity.github.io` (also **DNS only**).
 
-- Changes can take 24-48 hours to propagate
-- Use `dig` or online DNS tools to verify propagation
-- Clear browser cache when testing
+> Keep Cloudflare proxy **off** during cutover. A proxied (orange-cloud) record
+> hides the origin from GitHub's ACME challenge and can stall HTTPS
+> provisioning. It can be turned back on later only with a Full-strict origin
+> certificate strategy — out of scope for the initial cutover.
+
+#### 5. Wait for the Let's Encrypt certificate, then enforce HTTPS
+
+GitHub provisions the cert automatically once DNS resolves to Pages (minutes to
+an hour). When Settings → Pages stops showing the cert warning, tick
+**Enforce HTTPS**.
+
+#### 6. Verify
+
+```bash
+npm run preflight:cutover          # expect: "CUTOVER COMPLETE"
+npm run smoke -- https://catnipandcattitude.org
+```
+
+The preflight should now classify the domain as _GitHub Pages_ and confirm it
+serves the new site over HTTPS; the smoke check validates the home page,
+security.txt, robots, sitemap, manifest + icons, branded 404, and favicons on
+the live domain.
+
+#### Rollback (fast)
+
+The cutover is reversible at two independent layers — use whichever is quicker:
+
+- **DNS (fastest):** in Cloudflare, restore the previous apex/www records (or
+  re-enable the proxy pointing at the old origin). Propagation is bounded by the
+  record TTL, so **lower the TTL to 5 minutes a day before cutover** to keep
+  rollback fast.
+- **Repo:** revert the `public/CNAME` commit. The next deploy rebuilds with the
+  github.io subpath basePath, and `check:basepath` guards that build too, so the
+  testing URL keeps working regardless of DNS state.
 
 ---
 
