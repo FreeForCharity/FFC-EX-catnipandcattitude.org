@@ -50,8 +50,10 @@ const GH_PAGES_IPV4 = new Set([
 ])
 // Cloudflare proxies return addresses in these ranges (104.16.0.0/13 &
 // 172.64.0.0/13 are the common ones); enough to *label* the current host.
+// /13 = second octet 16–23 and 64–71 respectively — kept tight so the label
+// can't over-claim neighbouring space (e.g. 104.24+ or 172.72+ are NOT these).
 function isCloudflare(ip) {
-  return /^104\.(1[6-9]|2[0-9]|3[01])\./.test(ip) || /^172\.(6[4-9]|7[0-9])\./.test(ip)
+  return /^104\.(1[6-9]|2[0-3])\./.test(ip) || /^172\.(6[4-9]|7[01])\./.test(ip)
 }
 
 const results = []

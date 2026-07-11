@@ -34,7 +34,13 @@ jobs:
           node-version: '20'
 
       - name: Run cutover preflight
+        # Pass the workflow inputs through the environment rather than
+        # interpolating them into the shell command, so a value containing
+        # shell metacharacters (e.g. $(...)) can't be executed.
+        env:
+          INPUT_DOMAIN: ${{ inputs.domain }}
+          INPUT_ORIGIN: ${{ inputs.origin }}
         run: >
           node scripts/preflight-cutover.mjs
-          --domain="${{ inputs.domain }}"
-          --origin="${{ inputs.origin }}"
+          --domain="$INPUT_DOMAIN"
+          --origin="$INPUT_ORIGIN"
