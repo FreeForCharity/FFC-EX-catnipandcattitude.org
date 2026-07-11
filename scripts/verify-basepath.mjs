@@ -69,6 +69,9 @@ const SIGNALS = [
   '/icon.png',
   '/icon-192.png',
   '/apple-icon.png',
+  // The <link rel="manifest"> href is basePath-prefixed too; without this a
+  // basePath mismatch would 404 the manifest and the guard would still pass.
+  '/manifest.webmanifest',
 ]
 
 // Walk ./out for .html files plus the generated web manifest.

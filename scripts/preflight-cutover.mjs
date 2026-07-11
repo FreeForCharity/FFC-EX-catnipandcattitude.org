@@ -63,14 +63,20 @@ function record(ok, name, detail = '') {
 
 async function doh(name, type) {
   // Cloudflare first, Google as fallback — both speak the JSON DoH API.
-  const endpoints = [
-    `https://cloudflare-dns.com/dns-query?name=${name}&type=${type}`,
-    `https://dns.google/resolve?name=${name}&type=${type}`,
-  ]
+  // Encode the query name so a malformed --domain can't break the URL, and
+  // bound each request with an AbortController so a hung DoH endpoint falls
+  // through to the fallback (and can't stall the workflow to its job timeout).
+  const q = `name=${encodeURIComponent(name)}&type=${encodeURIComponent(type)}`
+  const endpoints = [`https://cloudflare-dns.com/dns-query?${q}`, `https://dns.google/resolve?${q}`]
   let lastErr = null
   for (const url of endpoints) {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), 10000)
     try {
-      const res = await fetch(url, { headers: { accept: 'application/dns-json' } })
+      const res = await fetch(url, {
+        headers: { accept: 'application/dns-json' },
+        signal: controller.signal,
+      })
       if (!res.ok) {
         lastErr = `HTTP ${res.status}`
         continue
@@ -79,6 +85,8 @@ async function doh(name, type) {
       return (json.Answer || []).map((a) => ({ type: a.type, data: a.data.replace(/\.$/, '') }))
     } catch (err) {
       lastErr = err?.message || String(err)
+    } finally {
+      clearTimeout(timer)
     }
   }
   throw new Error(`DoH lookup failed for ${name}/${type}: ${lastErr}`)
