@@ -398,3 +398,60 @@ body[data-nav-open='true'] .x [data-ux='NavigationDrawer'],
 body[data-nav-open='true'] .x [data-ux='NavigationDrawer'] * {
   visibility: visible !important;
 }
+
+/* --------------------------------------------------------------------------
+   FFC-standard attribution footer (see src/components/ffc-footer). Rendered
+   by the root layout on every page, below the cloned page chrome. Colors pick
+   up the site's own palette: dark green #173f3a (theme color, used across the
+   cloned design) with the gold #f4c95d accent used by .ffc-contact-btn.
+   -------------------------------------------------------------------------- */
+.ffc-footer {
+  background-color: #173f3a;
+  color: #ffffff;
+  font-family: var(--font-lato), sans-serif;
+  text-align: center;
+  padding: 2rem 1rem 2.25rem;
+}
+.ffc-footer__inner {
+  max-width: 64rem;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.ffc-footer a {
+  color: #f4c95d;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.ffc-footer a:hover,
+.ffc-footer a:focus-visible {
+  color: #ffffff;
+}
+.ffc-footer__identity {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.ffc-footer__links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 0.65rem;
+  row-gap: 0.35rem;
+  font-size: 0.9rem;
+}
+/* Dot separators between the inline policy links; wraps cleanly on mobile. */
+.ffc-footer__links li + li::before {
+  content: '·';
+  margin-right: 0.65rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+.ffc-footer__legal {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+}

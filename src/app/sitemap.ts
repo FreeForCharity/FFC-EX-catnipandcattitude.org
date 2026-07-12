@@ -33,6 +33,7 @@ export const routes: readonly SitemapEntry[] = [
   { path: '/contact', changeFrequency: 'monthly', priority: 0.5 },
   { path: '/privacy-policy', changeFrequency: 'yearly', priority: 0.2 },
   { path: '/cookie-policy', changeFrequency: 'yearly', priority: 0.2 },
+  { path: '/terms-of-service', changeFrequency: 'yearly', priority: 0.2 },
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {
