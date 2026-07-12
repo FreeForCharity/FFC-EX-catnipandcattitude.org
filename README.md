@@ -2,6 +2,22 @@
 
 Single-page Next.js 16.0.7 website built with App Router for Free For Charity nonprofit organization.
 
+## 🧪 Gated-journey pilot
+
+This repository is the **first charity through FFC's gated onboarding journey** — the pilot for the
+build → validate → domain → email delivery order (work order:
+[FreeForCharity/FFC-IN-ffcadmin.org#584](https://github.com/FreeForCharity/FFC-IN-ffcadmin.org/issues/584)).
+
+**Current state:**
+
+- ✅ **Gate 3 validated (8/8)** — every item of the "website validated" checklist passed on the
+  site's GitHub Pages URL, including the FFC-standard footer retrofit ([PR #29](https://github.com/FreeForCharity/FFC-EX-catnipandcattitude.org/pull/29)).
+- ⏸️ **Gate-4 DNS cutover DEFERRED by operator decision** — the site stays on its GitHub Pages URL
+  until cutover is approved. The cutover runbook lives on
+  [PR #27](https://github.com/FreeForCharity/FFC-EX-catnipandcattitude.org/pull/27).
+- ⚠️ **`public/CNAME` must stay absent until cutover approval** — adding it re-arms the custom
+  domain and would take the site off its validated staging URL prematurely.
+
 ## 🎉 Phase 5 Implementation Complete
 
 **Status:** ✅ All critical gaps closed. Repository now has enterprise-grade tooling, comprehensive testing, and professional documentation.

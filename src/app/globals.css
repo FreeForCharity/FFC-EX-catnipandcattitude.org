@@ -444,6 +444,14 @@ body[data-nav-open='true'] .x [data-ux='NavigationDrawer'] * {
   row-gap: 0.35rem;
   font-size: 0.9rem;
 }
+/* WCAG 2.5.8 / Lighthouse "target-size": bare inline links are only ~17px
+   tall, which fails the 24x24px minimum tap-target size. Block padding lifts
+   each link above the threshold (and adds clearance between neighbors)
+   without changing the text size or colors. */
+.ffc-footer__links a {
+  display: inline-block;
+  padding: 0.5rem 0.3rem;
+}
 /* Dot separators between the inline policy links; wraps cleanly on mobile. */
 .ffc-footer__links li + li::before {
   content: '·';
