@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import CookieConsent from './../components/cookie-consent'
+import FfcFooter from './../components/ffc-footer'
 import NavToggle from './../components/nav-toggle'
 import GoogleTagManager, { GoogleTagManagerNoScript } from './../components/google-tag-manager'
 import { siteConfig, siteUrl, twitterSite, cardDescription } from '@/lib/site.config'
@@ -116,8 +117,11 @@ export default function RootLayout({
         {/* The cloned pages carry their own header + footer (faithful to the
             live site design), so the FFC template Header/Footer are omitted
             here. FFC technical features — metadata, CSP, GTM, cookie consent,
-            fonts, favicon — are retained via <head> + the wrappers below. */}
+            fonts, favicon — are retained via <head> + the wrappers below.
+            The FFC attribution footer (EIN, policy links, "Supported by Free
+            For Charity") renders site-wide below the cloned chrome. */}
         <main id="main-content">{children}</main>
+        <FfcFooter />
         <NavToggle />
         <CookieConsent />
       </body>

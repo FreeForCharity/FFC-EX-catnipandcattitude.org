@@ -52,3 +52,32 @@ test.describe('Navigation routes', () => {
     })
   }
 })
+
+test.describe('FFC attribution footer', () => {
+  const POLICY_ROUTES = ['/privacy-policy', '/cookie-policy', '/terms-of-service']
+
+  for (const path of [...ROUTES, ...POLICY_ROUTES]) {
+    test(`renders on ${path}`, async ({ page }) => {
+      await page.goto(path)
+      const footer = page.locator('footer.ffc-footer')
+      await expect(footer).toBeVisible()
+      await expect(footer.getByText(/Supported by/i)).toBeVisible()
+      await expect(footer.getByText(/EIN 87-2901410/)).toBeVisible()
+    })
+  }
+
+  test('carries the FFC attribution, hub login, and policy links', async ({ page }) => {
+    await page.goto('/')
+    const footer = page.locator('footer.ffc-footer')
+    await expect(footer.locator('a[href="https://freeforcharity.org"]')).toHaveText(
+      'Free For Charity'
+    )
+    await expect(footer.locator('a[href="https://freeforcharity.org/hub/"]')).toHaveText(
+      'Supported Charity Login'
+    )
+    await expect(footer.locator('a[href="/privacy-policy"]')).toBeVisible()
+    await expect(footer.locator('a[href="/cookie-policy"]')).toBeVisible()
+    await expect(footer.locator('a[href="/terms-of-service"]')).toBeVisible()
+    await expect(footer.locator('a[href*="app.candid.org/profile"]')).toBeVisible()
+  })
+})

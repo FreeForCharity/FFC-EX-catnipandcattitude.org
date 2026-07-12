@@ -135,7 +135,7 @@ export const siteConfig: SiteConfig = {
   themeColor: '#173f3a',
   vulnerabilityDisclosurePath: '/vulnerability-disclosure-policy',
   social: [{ label: 'Facebook', href: 'https://www.facebook.com/CatnipCattitude' }],
-  ein: '',
+  ein: '87-2901410',
   phone: { display: '(530) 330-5433', tel: '5303305433' },
   addresses: [
     {
@@ -144,7 +144,10 @@ export const siteConfig: SiteConfig = {
       mapUrl: 'https://www.google.com/maps/search/?api=1&query=Willows+CA+95988',
     },
   ],
-  guidestar: { profileUrl: '', directProfileUrl: '' },
+  guidestar: {
+    profileUrl: 'https://app.candid.org/profile/14021527/catnip-and-cattitude-87-2901410',
+    directProfileUrl: 'https://app.candid.org/profile/14021527/catnip-and-cattitude-87-2901410',
+  },
   integrations: {
     zeffyDonationUrl:
       'https://www.zeffy.com/embed/donation-form/compassionate-care-for-community-cats',
