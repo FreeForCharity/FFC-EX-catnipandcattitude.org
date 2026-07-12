@@ -33,7 +33,9 @@ export default function FfcFooter() {
               href={siteConfig.guidestar.profileUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`View the ${siteConfig.name} nonprofit profile on Candid`}
+              // The accessible name must contain the visible text
+              // (axe "label-content-name-mismatch"), so lead with it.
+              aria-label={`${siteConfig.name} — EIN ${siteConfig.ein} — view the nonprofit profile on Candid`}
             >
               {siteConfig.name} — EIN {siteConfig.ein}
             </a>
