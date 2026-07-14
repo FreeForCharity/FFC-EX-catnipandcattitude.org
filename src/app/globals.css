@@ -300,6 +300,14 @@ a[href^='https://policies.google.com'] {
   height: auto !important;
   overflow: visible !important;
 }
+/* The GoDaddy carousel wrapper ships at opacity:0 and is faded in by the
+   builder's runtime JS (removed in the static clone). Without that JS it
+   stays invisible, hiding the adoption galleries entirely (images load but
+   an opacity:0 ancestor makes them unpaintable). Force it visible wherever
+   it now wraps a static adoption gallery. */
+.carousel:has(.ffc-adopt) {
+  opacity: 1 !important;
+}
 .ffc-adopt {
   display: grid;
   gap: 1rem;
