@@ -300,6 +300,17 @@ a[href^='https://policies.google.com'] {
   height: auto !important;
   overflow: visible !important;
 }
+/* Hide cloned third-party widget sections whose content came from GoDaddy
+   runtime JS / external embeds that the static clone strips (an Instagram
+   feed, a reviews carousel, and a partner-logos strip on /who-we-are). With
+   the widgets gone they render as a heading over a tall empty gap, which
+   reads as broken. Marked with .ffc-empty-widget in the cloned markup so
+   only the confirmed-empty instances are removed (populated sections such as
+   the homepage reviews are untouched). */
+.ffc-empty-widget {
+  display: none !important;
+}
+
 /* The GoDaddy carousel wrapper ships at opacity:0 and is faded in by the
    builder's runtime JS (removed in the static clone). Without that JS it
    stays invisible, hiding the adoption galleries entirely (images load but
