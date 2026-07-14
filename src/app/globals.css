@@ -300,6 +300,55 @@ a[href^='https://policies.google.com'] {
   height: auto !important;
   overflow: visible !important;
 }
+/* Hide cloned third-party widget sections whose content was rendered live by
+   GoDaddy runtime JS with no static markup to preserve — the Instagram feed
+   (widget-socialfeed) and the reviews widget (widget-reviews) on /who-we-are.
+   Their content lives on Instagram / the review platform, not in the cloned
+   HTML, so with the JS stripped they render as a heading over a tall empty
+   gap. Marked with .ffc-empty-widget on only those confirmed-dynamic-empty
+   sections. (The partner logos are NOT hidden — they are real images
+   recovered from data-srclazy; see below.) */
+.ffc-empty-widget {
+  display: none !important;
+}
+
+/* /who-we-are "Our Partners": the real partner logos were captured in the
+   clone as GoDaddy carousel "measurement" slides (position:absolute;
+   visibility:hidden), which its runtime JS would normally lay out and reveal.
+   Without that JS they never appear. Rather than resurrect the carousel we
+   render the recovered logos (from data-srclazy) as a simple static row and
+   hide the broken original carousel (.ffc-hide). */
+.ffc-hide {
+  display: none !important;
+}
+.ffc-partners {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem 2.5rem;
+  justify-content: center;
+  align-items: center;
+  max-width: 760px;
+  margin: 1.5rem auto 0;
+  padding: 0 1rem;
+}
+.ffc-partners img {
+  width: auto;
+  max-width: 200px;
+  max-height: 110px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* The GoDaddy carousel wrapper ships at opacity:0 and is faded to 1 by the
+   builder's runtime JS, which the static clone strips. Left alone it stays
+   invisible, and because opacity on an ancestor makes every descendant
+   unpaintable, any gallery inside it disappears (the images load but never
+   paint). Force all cloned carousels visible. Scoped to the cloned body
+   (.x) and NOT using :has() so it also applies on browsers without :has()
+   support — otherwise the galleries would silently go invisible again there. */
+.x .carousel {
+  opacity: 1 !important;
+}
 .ffc-adopt {
   display: grid;
   gap: 1rem;
