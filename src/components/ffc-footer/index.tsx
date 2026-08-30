@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { siteConfig } from '@/lib/site.config'
 
@@ -56,6 +58,14 @@ export default function FfcFooter() {
             <a href="https://freeforcharity.org/hub/" target="_blank" rel="noopener noreferrer">
               Supported Charity Login
             </a>
+          </li>
+          <li>
+            {/* Persistent consent re-entry point (withdrawing consent must
+                stay as easy as giving it): reopens the preferences modal
+                the cookie-consent banner registers on window. */}
+            <button type="button" onClick={() => window.openCookiePreferences?.()}>
+              Cookie Preferences
+            </button>
           </li>
         </ul>
 

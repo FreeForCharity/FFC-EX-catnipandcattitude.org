@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <PolicyPage title="Cookie Policy" lastUpdated="2026-07-08">
+    <PolicyPage title="Cookie Policy" lastUpdated="2026-08-30">
       <p>
         This Cookie Policy explains how {siteConfig.name} uses cookies and similar technologies on
         this website.
@@ -26,15 +26,39 @@ export default function Page() {
       <h2>How we use cookies</h2>
       <p>
         We use a small number of cookies for website analytics — to understand which pages are
-        visited and how the site performs. These are only set after you accept non-essential cookies
-        in the consent banner. Essential cookies needed for the site to function may be set
-        automatically.
+        visited and how the site performs. Essential cookies needed for the site to function may be
+        set automatically.
+      </p>
+      <h2>When we ask permission first</h2>
+      <p>
+        We use Google Consent Mode. If you are in the European Economic Area, the United Kingdom, or
+        Switzerland, Google Analytics sets no cookies and collects no identifiers until you accept
+        through the consent banner — until then it only counts your visit in an aggregate,
+        cookie-free way that cannot be tied back to you. Everywhere else, Google Analytics cookies
+        are set from your first visit, and you can turn them off at any time using the Cookie
+        Preferences link in our footer — we delete the analytics cookies this site set when you do.
+        Which of these rules applies to your visit is determined by Google from your IP address at
+        the time of your visit; IP geolocation is approximate.
+      </p>
+      <p>
+        Session-recording analytics (Microsoft Clarity) and marketing tags (Meta Pixel) are
+        different: they load only if you explicitly opt in through the consent banner — everywhere
+        in the world. Declining, or simply not answering the banner, keeps them off.
       </p>
 
       <h2>Managing cookies</h2>
       <p>
         You can accept or decline non-essential cookies using the consent banner shown on your first
-        visit. You can also control or delete cookies through your browser settings at any time.
+        visit, and change your mind at any time via the Cookie Preferences link in the footer —
+        withdrawing consent deletes the analytics and marketing cookies this site set. You can also
+        control or delete cookies through your browser settings at any time.
+      </p>
+      <h2>Do Not Track and Global Privacy Control</h2>
+      <p>
+        This site does not read or respond to the &ldquo;Do Not Track&rdquo; or Global Privacy
+        Control browser signals. We do not sell or share personal information as defined by the
+        CCPA/CPRA, so there is nothing for those signals to opt out of. You can control cookies
+        through the consent banner and the Cookie Preferences link described above.
       </p>
 
       <h2>More information</h2>
