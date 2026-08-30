@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import PolicyPage from '@/components/policy-page'
 import { siteConfig } from '@/lib/site.config'
 
@@ -36,7 +37,7 @@ export default function Page() {
         your visit is determined by Google from your IP address at the time of your visit; IP
         geolocation is approximate. You can change your choice at any time via the Cookie
         Preferences link in the footer — withdrawing consent deletes the tracking cookies this site
-        set. See our <a href="/cookie-policy">Cookie Policy</a> for details.
+        set. See our <Link href="/cookie-policy">Cookie Policy</Link> for details.
       </p>
 
       <h2>How we use information</h2>

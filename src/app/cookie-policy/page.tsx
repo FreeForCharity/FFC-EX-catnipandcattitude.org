@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import PolicyPage from '@/components/policy-page'
 import { siteConfig } from '@/lib/site.config'
 
@@ -64,7 +65,7 @@ export default function Page() {
       <h2>More information</h2>
       <p>
         For how we handle information generally, see our{' '}
-        <a href="/privacy-policy">Privacy Policy</a>.
+        <Link href="/privacy-policy">Privacy Policy</Link>.
       </p>
 
       <p style={{ color: '#666', fontSize: '0.85rem', marginTop: '2rem' }}>

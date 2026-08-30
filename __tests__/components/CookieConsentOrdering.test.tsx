@@ -1,11 +1,12 @@
 import React from 'react'
 import { render, waitFor } from '@testing-library/react'
-import CookieConsent from '../../src/components/cookie-consent'
 
 // The shipped GA measurement ID is the inert placeholder, which keeps the
 // direct GA4 loader from injecting anything — give this suite a real-looking
 // ID so the injection (and its ordering against the consent update) is
-// observable. isConfigured keeps its real implementation.
+// observable. isConfigured keeps its real implementation. (jest.mock calls
+// are hoisted above imports either way; keeping the call textually first
+// matches the repo's other tests.)
 jest.mock('../../src/lib/analytics.config', () => {
   const actual = jest.requireActual('../../src/lib/analytics.config')
   return {
@@ -13,6 +14,8 @@ jest.mock('../../src/lib/analytics.config', () => {
     analyticsConfig: { ...actual.analyticsConfig, gaMeasurementId: 'G-TEST1234567' },
   }
 })
+
+import CookieConsent from '../../src/components/cookie-consent'
 
 const GA_SCRIPT_SELECTOR = 'script[src*="googletagmanager.com/gtag"]'
 
