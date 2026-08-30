@@ -26,31 +26,34 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Check formatting
-        run: npm run format:check
+        run: pnpm run format:check
 
       - name: Run linting
-        run: npm run lint
+        run: pnpm run lint
 
       - name: Run unit tests
-        run: npm test
+        run: pnpm test
         env:
           CI: true
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Build Next.js site
-        run: npm run build
+        run: pnpm run build
         # Note: Do NOT set NEXT_PUBLIC_BASE_PATH here
         # The basePath is only needed for actual GitHub Pages deployment (in deploy.yml)
         # E2E tests need to run against a build without basePath since the test server
@@ -58,17 +61,17 @@ jobs:
 
       - name: Check bundle size
         # Reuses the build above — fails if shipped JS exceeds the gzipped budget.
-        run: npm run check:bundle
+        run: pnpm run check:bundle
 
       - name: Verify asset paths (root/custom-domain build)
         # CI builds without a basePath — the same shape the custom-domain
         # deploy produces. Assert no subpath prefix leaked into the emitted
         # asset references, so the custom-domain build is proven clean on
         # every PR (not first exercised during the DNS cutover).
-        run: npm run check:basepath
+        run: pnpm run check:basepath
 
       - name: Run E2E tests
-        run: npm run test:e2e
+        run: pnpm run test:e2e
         env:
           CI: true
 
@@ -96,17 +99,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: '20'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build Next.js site
-        run: npm run build
+        run: pnpm run build
 
       - name: Check for broken links
-        run: npm run check-links
+        run: pnpm run check-links
