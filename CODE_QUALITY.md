@@ -73,7 +73,7 @@ pnpm run lint -- --fix
 pnpm run build
 
 # Or use tsc directly
-npx tsc --noEmit
+pnpm exec tsc --noEmit
 ```
 
 **Best Practices**:

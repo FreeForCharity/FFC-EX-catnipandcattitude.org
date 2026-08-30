@@ -276,7 +276,7 @@ pnpm test MyComponent
 
 ```bash
 # Kill process on port 3000
-npx kill-port 3000
+pnpm dlx kill-port 3000
 
 # Or use a different port
 PORT=3001 pnpm run dev
