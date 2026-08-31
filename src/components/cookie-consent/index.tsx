@@ -161,7 +161,7 @@ export default function CookieConsent() {
     })
   }, [])
 
-  // Deletes each NON-granted category's third-party cookies (analytics:
+  // Expires each NON-granted category's first-party cookies (analytics:
   // GA4 + Clarity; marketing: Meta Pixel). Called with no argument
   // (Decline All) it deletes every category. Per-category deletion matters
   // under the regional Consent Mode defaults: outside the EEA/UK/CH the
