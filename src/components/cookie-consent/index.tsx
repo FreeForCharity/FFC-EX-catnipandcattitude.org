@@ -161,14 +161,22 @@ export default function CookieConsent() {
     })
   }, [])
 
-  // Expires each NON-granted category's first-party cookies (analytics:
-  // GA4 + Clarity; marketing: Meta Pixel). Called with no argument
-  // (Decline All) it deletes every category. Per-category deletion matters
-  // under the regional Consent Mode defaults: outside the EEA/UK/CH the
-  // Google tags may have set cookies before the visitor ever touched the
-  // banner, so deletion cannot depend on a previously stored grant — and
-  // a visitor who keeps analytics but drops marketing must not have their
-  // `_ga` client id wiped on every pageview.
+  // Expires the cookies of each category that is NOT granted in `prefs`.
+  // Analytics covers GA4 + Microsoft Clarity; marketing covers the Meta
+  // Pixel. Called with no argument it drops both categories — a full
+  // teardown no caller needs today, since applyConsent always passes the
+  // resulting preferences.
+  //
+  // Keyed on the RESULTING preference state rather than on what changed:
+  // withdrawing marketing alone must not wipe GA4/Clarity cookies while
+  // analytics consent still stands, and a first-time decline must still
+  // clear cookies that the granted-by-default regional bootstrap allowed
+  // to be set before any choice was stored.
+  //
+  // Only cookies scoped to THIS site's domain can be expired here — that
+  // is all document.cookie can reach. A genuinely third-party cookie (the
+  // copy of Meta's `fr` held on facebook.com) is beyond it; `fr` is listed
+  // only to clear a first-party copy where one exists.
   const deleteTrackingCookies = useCallback(
     (prefs?: CookiePreferences) => {
       const deleteAnalytics = !prefs || !prefs.analytics
@@ -403,10 +411,6 @@ export default function CookieConsent() {
       // If localStorage is unavailable, continue anyway
       console.warn('Unable to save preferences to localStorage:', e)
     }
-
-    // Expire the tracking cookies set on this site's domain when consent
-    // is withdrawn. (Cookies that providers set on their own domains —
-    // e.g. Meta's `fr` on facebook.com — are out of reach of this origin
     applyConsent(onlyNecessary)
     setSavedPreferencesBackup(onlyNecessary)
     setShowBanner(false)
