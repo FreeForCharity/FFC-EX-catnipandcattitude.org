@@ -407,9 +407,6 @@ export default function CookieConsent() {
     // Expire the tracking cookies set on this site's domain when consent
     // is withdrawn. (Cookies that providers set on their own domains —
     // e.g. Meta's `fr` on facebook.com — are out of reach of this origin
-    // and are governed by those providers' own controls.)
-    deleteTrackingCookies()
-
     applyConsent(onlyNecessary)
     setSavedPreferencesBackup(onlyNecessary)
     setShowBanner(false)
