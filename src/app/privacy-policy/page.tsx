@@ -33,11 +33,13 @@ export default function Page() {
         We use cookies and similar technologies for analytics, governed by Google Consent Mode. In
         the European Economic Area, the United Kingdom, and Switzerland, Google Analytics runs
         cookie-free until you accept through the consent banner; everywhere else, including the
-        United States, analytics cookies are set from your first pageview. Which rule applies to
-        your visit is determined by Google from your IP address at the time of your visit; IP
-        geolocation is approximate. You can change your choice at any time via the Cookie
-        Preferences link in the footer — withdrawing consent deletes the tracking cookies this site
-        set. See our <Link href="/cookie-policy">Cookie Policy</Link> for details.
+        United States, analytics cookies are set from your first pageview. (Switzerland is included
+        because Google&apos;s consent defaults cover it; Swiss visitors&apos; data is protected by
+        the Swiss FADP rather than the GDPR.) Which rule applies to your visit is determined by
+        Google from your IP address at the time of your visit; IP geolocation is approximate. You
+        can change your choice at any time via the Cookie Preferences link in the footer —
+        withdrawing consent deletes the tracking cookies this site set. See our{' '}
+        <Link href="/cookie-policy">Cookie Policy</Link> for details.
       </p>
 
       <h2>How we use information</h2>
