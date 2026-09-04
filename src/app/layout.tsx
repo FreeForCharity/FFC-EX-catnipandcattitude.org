@@ -4,6 +4,7 @@ import CookieConsent from './../components/cookie-consent'
 import FfcFooter from './../components/ffc-footer'
 import NavToggle from './../components/nav-toggle'
 import GoogleTagManager, { GoogleTagManagerNoScript } from './../components/google-tag-manager'
+import { CONSENT_MODE_BOOTSTRAP } from '@/lib/consent-mode'
 import { siteConfig, siteUrl, twitterSite, cardDescription } from '@/lib/site.config'
 import { assetPath } from '@/lib/assetPath'
 import { openSans, lato, faustina } from '@/lib/fonts'
@@ -100,6 +101,14 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.clarity.ms" />
         <link rel="dns-prefetch" href="https://connect.facebook.net" />
 
+        {/* Google Consent Mode v2 defaults — MUST run before any Google tag
+            (i.e. before the GoogleTagManager component below) so the global
+            consent defaults are already on the dataLayer when GTM/GA4
+            initialise. Denied worldwide: one unscoped default withholds
+            analytics and ad storage from every visitor until they opt in, so
+            there is no region left for Google to resolve from the visitor's IP
+            address. See src/lib/consent-mode.ts. */}
+        <script dangerouslySetInnerHTML={{ __html: CONSENT_MODE_BOOTSTRAP }} />
         <GoogleTagManager />
       </head>
       <body
