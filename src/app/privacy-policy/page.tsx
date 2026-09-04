@@ -32,12 +32,12 @@ export default function Page() {
       <p>
         We use cookies and similar technologies for analytics, governed by Google Consent Mode.
         Google Analytics runs cookie-free until you accept through the consent banner, wherever in
-        the world you are; There is no country in which analytics cookies are set before you choose.
-        (Switzerland is included because Google&apos;s consent defaults cover it; the data of
-        visitors in Switzerland is protected by Switzerland&apos;s Federal Act on Data Protection
-        (FADP) rather than the GDPR.) The same rule applies to every visitor, so nothing depends on
-        where you are. You can change your choice at any time via the Cookie Preferences link in the
-        footer — withdrawing consent deletes the tracking cookies this site set. See our{' '}
+        the world you are. There is no country in which analytics cookies are set before you choose.
+        (Visitors in Switzerland are protected by Switzerland&apos;s Federal Act on Data Protection
+        (FADP) rather than the GDPR; the treatment described here is the same either way.) The same
+        rule applies to every visitor, so nothing depends on where you are. You can change your
+        choice at any time via the Cookie Preferences link in the footer — withdrawing consent
+        deletes the tracking cookies this site set. See our{' '}
         <Link href="/cookie-policy">Cookie Policy</Link> for details.
       </p>
 
