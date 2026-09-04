@@ -32,14 +32,13 @@ export default function Page() {
       </p>
       <h2>When we ask permission first</h2>
       <p>
-        We use Google Consent Mode. If you are in the European Economic Area, the United Kingdom, or
-        Switzerland, Google Analytics sets no cookies and collects no identifiers until you accept
-        through the consent banner — until then it only counts your visit in an aggregate,
-        cookie-free way that cannot be tied back to you. Everywhere else, Google Analytics cookies
-        are set from your first visit, and you can turn them off at any time using the Cookie
-        Preferences link in our footer — we delete the analytics cookies this site set when you do.
-        Which of these rules applies to your visit is determined by Google from your IP address at
-        the time of your visit; IP geolocation is approximate.
+        We use Google Consent Mode. No matter where in the world you are, Google Analytics sets no
+        analytics or advertising cookies and collects no identifiers from your device until you
+        accept through the consent banner — until then it only counts your visit in an aggregate,
+        cookie-free way that cannot be tied back to you. There is no country in which analytics
+        cookies are set before you choose, and you can turn them off again at any time using the
+        Cookie Preferences link in our footer — we delete the analytics cookies this site set when
+        you do. The same rule applies to every visitor, so nothing depends on where you are.
       </p>
       <p>
         Session-recording analytics (Microsoft Clarity) and marketing tags (Meta Pixel) are
