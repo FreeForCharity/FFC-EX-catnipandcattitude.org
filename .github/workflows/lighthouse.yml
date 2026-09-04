@@ -85,8 +85,7 @@ jobs:
 
       - name: Run Lighthouse CI
         run: |
-          npm install -g @lhci/cli
-          lhci autorun ${{ steps.stage.outputs.flags }}
+          pnpm exec lhci autorun ${{ steps.stage.outputs.flags }}
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
