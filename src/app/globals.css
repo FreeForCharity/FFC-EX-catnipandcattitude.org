@@ -468,14 +468,26 @@ body[data-nav-open='true'] .x [data-ux='NavigationDrawer'] * {
   flex-direction: column;
   gap: 0.85rem;
 }
-.ffc-footer a {
+.ffc-footer a,
+.ffc-footer__links button {
   color: #f4c95d;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 .ffc-footer a:hover,
-.ffc-footer a:focus-visible {
+.ffc-footer a:focus-visible,
+.ffc-footer__links button:hover,
+.ffc-footer__links button:focus-visible {
   color: #ffffff;
+}
+/* The Cookie Preferences control is a button (it opens the consent modal
+   rather than navigating), styled to read exactly like its sibling links. */
+.ffc-footer__links button {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
 }
 .ffc-footer__identity {
   margin: 0;
@@ -497,7 +509,8 @@ body[data-nav-open='true'] .x [data-ux='NavigationDrawer'] * {
    tall, which fails the 24x24px minimum tap-target size. Block padding lifts
    each link above the threshold (and adds clearance between neighbors)
    without changing the text size or colors. */
-.ffc-footer__links a {
+.ffc-footer__links a,
+.ffc-footer__links button {
   display: inline-block;
   padding: 0.5rem 0.3rem;
 }
